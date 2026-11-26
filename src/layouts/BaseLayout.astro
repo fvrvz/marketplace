@@ -1,0 +1,124 @@
+---
+import '@fayso/nostyle-css';
+import '../styles/marketplace.css';
+import { Package, Moon, Sun, GitBranch } from '@lucide/astro';
+
+interface Props {
+  readonly title: string;
+  readonly description?: string;
+}
+
+const {
+  title,
+  description = 'Official marketplace showcase for reusable libraries, UI kits, and SaaS apps built by Faraaz Khan (fvrvz).',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem('mp-theme');
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="mp-header">
+      <nav class="mp-container mp-nav" aria-label="Primary">
+        <a href="/" class="mp-brand">
+          <span class="mp-brand-badge" aria-hidden="true">
+            <Package size={18} />
+          </span>
+          <span>fvrvz<span style="color: var(--mp-accent);">.market</span></span>
+        </a>
+
+        <div class="mp-nav-links">
+          <a href="/#catalog" class="mp-nav-link">Catalog</a>
+          <a href="/#about" class="mp-nav-link mp-hide-sm">Developer</a>
+          <a href="/#contact" class="mp-nav-link">Contact</a>
+          <button
+            id="theme-toggle"
+            type="button"
+            class="mp-btn"
+            aria-label="Toggle color theme"
+            style="padding: 0.45rem 0.65rem;"
+          >
+            <Sun size={16} class="mp-icon-sun" />
+            <Moon size={16} class="mp-icon-moon" />
+          </button>
+          <a
+            href="https://github.com/fvrvz"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mp-btn mp-btn-primary"
+            style="padding: 0.45rem 0.8rem;"
+          >
+            <GitBranch size={16} />
+            <span class="mp-hide-sm">GitHub</span>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mp-footer">
+      <div class="mp-container flex flex-wrap items-center justify-between gap-4">
+        <p style="margin: 0;">
+          © {new Date().getFullYear()} Faraaz Khan · Built with Astro, TypeScript, Cloudflare D1 &amp; NoStyle CSS.
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="https://marketplace.byfaraaz.com" class="mp-nav-link">marketplace.byfaraaz.com</a>
+          <a href="https://github.com/fvrvz/marketplace" target="_blank" rel="noopener noreferrer" class="mp-nav-link">
+            Source
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import { animate, stagger } from 'motion';
+
+      const syncThemeIcons = (): void => {
+        const theme = document.documentElement.getAttribute('data-theme') ?? 'dark';
+        const sun = document.querySelector<HTMLElement>('.mp-icon-sun');
+        const moon = document.querySelector<HTMLElement>('.mp-icon-moon');
+        if (sun && moon) {
+          sun.style.display = theme === 'dark' ? 'inline-flex' : 'none';
+          moon.style.display = theme === 'light' ? 'inline-flex' : 'none';
+        }
+      };
+
+      syncThemeIcons();
+
+      const toggleBtn = document.getElementById('theme-toggle');
+      toggleBtn?.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') ?? 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('mp-theme', next);
+        syncThemeIcons();
+      });
+
+      const animatedEls = document.querySelectorAll<HTMLElement>('.mp-animate');
+      if (animatedEls.length > 0) {
+        animate(
+          animatedEls,
+          { opacity: [0, 1], y: [14, 0] },
+          { duration: 0.45, delay: stagger(0.05), ease: 'easeOut' },
+        );
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,260 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutDeveloper from '../components/AboutDeveloper.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { MARKETPLACE_ITEMS, getCategoryLabel } from '../data/registry';
+import { Search, Copy, ExternalLink, ArrowRight, Download, Sparkles, Lock } from '@lucide/astro';
+
+const totalFallbackDownloads = MARKETPLACE_ITEMS.reduce(
+  (sum, item) => sum + item.fallbackDownloads.total,
+  0,
+);
+const publicCount = MARKETPLACE_ITEMS.filter((i) => !i.isPrivate).length;
+const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
+---
+
+<BaseLayout title="fvrvz.market — Reusable Packages, UI Kits & SaaS Apps">
+  <section class="mp-hero">
+    <div class="mp-container">
+      <span class="mp-pill mp-animate">
+        <Sparkles size={14} />
+        Open-Source Registry &amp; App Showcase
+      </span>
+      <h1 class="mp-hero-title mp-animate">
+        Reusable libraries, UI kits &amp; apps built to ship faster.
+      </h1>
+      <p class="mp-hero-sub mp-animate">
+        Explore production-ready Go packages, CSS utility frameworks, Angular UI components, Flutter apps, and full-stack SaaS platforms by Faraaz Khan.
+      </p>
+      <div class="flex flex-wrap gap-3 mp-animate">
+        <a href="#catalog" class="mp-btn mp-btn-primary">
+          Browse Catalog
+          <ArrowRight size={16} />
+        </a>
+        <a href="#contact" class="mp-btn">Get in Touch</a>
+      </div>
+
+      <div class="mp-stats-strip mp-animate">
+        <div class="mp-stat-card">
+          <div class="mp-stat-value">{MARKETPLACE_ITEMS.length}</div>
+          <div class="mp-stat-label">Total Projects ({publicCount} Public)</div>
+        </div>
+        <div class="mp-stat-card">
+          <div class="mp-stat-value" id="hero-total-downloads">{totalFallbackDownloads.toLocaleString()}</div>
+          <div class="mp-stat-label">Total Downloads (Cloudflare D1)</div>
+        </div>
+        <div class="mp-stat-card">
+          <div class="mp-stat-value">{ecosystemsCount}</div>
+          <div class="mp-stat-label">Ecosystems &amp; Languages</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalog" class="mp-section" style="padding-top: 1rem;">
+    <div class="mp-container">
+      <div class="mp-controls">
+        <div class="mp-search-wrap">
+          <Search
+            size={16}
+            style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--mp-muted);"
+          />
+          <input
+            id="catalog-search"
+            type="search"
+            class="mp-search-input"
+            placeholder="Search packages, Go, CSS, Flutter, SaaS..."
+            aria-label="Search marketplace items"
+          />
+        </div>
+
+        <div class="mp-tabs" role="tablist" aria-label="Filter by category">
+          <button type="button" class="mp-tab" data-filter="all" data-active="true">All</button>
+          <button type="button" class="mp-tab" data-filter="package">Packages &amp; Libs</button>
+          <button type="button" class="mp-tab" data-filter="ui-kit">UI Kits</button>
+          <button type="button" class="mp-tab" data-filter="saas">SaaS Platforms</button>
+          <button type="button" class="mp-tab" data-filter="app">Apps</button>
+          <button type="button" class="mp-tab" data-filter="coming-soon">Coming Soon</button>
+        </div>
+      </div>
+
+      <div id="catalog-grid" class="mp-grid">
+        {MARKETPLACE_ITEMS.map((item) => {
+          const primaryInstall = item.installMethods[0];
+          const statusClass =
+            item.status === 'stable'
+              ? 'mp-badge-stable'
+              : item.status === 'beta'
+                ? 'mp-badge-beta'
+                : 'mp-badge-soon';
+
+          return (
+            <article
+              class="mp-card mp-animate"
+              data-slug={item.slug}
+              data-category={item.category}
+              data-status={item.status}
+              data-search={`${item.name} ${item.tagline} ${item.language} ${item.ecosystem} ${item.tags.join(' ')}`.toLowerCase()}
+            >
+              <a href={`/item/${item.slug}`} class="mp-card-media" aria-label={`View ${item.name} details`}>
+                <img src={item.screenshot} alt={`${item.name} preview`} loading="lazy" />
+              </a>
+
+              <div class="mp-card-body">
+                <div class="mp-badges">
+                  <span class="mp-badge">{getCategoryLabel(item.category)}</span>
+                  <span class="mp-badge">{item.language}</span>
+                  <span class={`mp-badge ${statusClass}`}>
+                    {item.isPrivate && <Lock size={11} />}
+                    {item.status}
+                  </span>
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between gap-2">
+                    <h2 style="margin: 0; font-size: 1.18rem; font-weight: 700;">
+                      <a href={`/item/${item.slug}`} style="color: inherit; text-decoration: none;">
+                        {item.name}
+                      </a>
+                    </h2>
+                    <span class="flex items-center gap-1" style="font-size: 0.78rem; color: var(--mp-muted);">
+                      <Download size={13} />
+                      <span data-download-count={item.slug}>
+                        {item.fallbackDownloads.total.toLocaleString()}
+                      </span>
+                    </span>
+                  </div>
+                  <p style="margin: 0.35rem 0 0; color: var(--mp-muted); font-size: 0.9rem;">
+                    {item.tagline}
+                  </p>
+                </div>
+
+                {primaryInstall && (
+                  <div class="mp-install-box">
+                    <code class="mp-install-code">$ {primaryInstall.command}</code>
+                    <button
+                      type="button"
+                      class="mp-btn copy-install-btn"
+                      data-copy-command={primaryInstall.command}
+                      data-copy-slug={item.slug}
+                      aria-label={`Copy install command for ${item.name}`}
+                      style="padding: 0.28rem 0.5rem; font-size: 0.74rem;"
+                    >
+                      <Copy size={13} />
+                    </button>
+                  </div>
+                )}
+
+                <div class="flex items-center justify-between gap-2" style="margin-top: auto; padding-top: 0.35rem;">
+                  <a href={`/item/${item.slug}`} class="mp-btn mp-btn-primary" style="flex: 1;">
+                    Details &amp; Stats
+                  </a>
+                  <a
+                    href={item.links.landingPage ?? item.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mp-btn"
+                    title={item.links.landingPage ? 'Visit Landing Page' : 'View on GitHub'}
+                  >
+                    <ExternalLink size={15} />
+                    {item.links.landingPage ? 'Site' : 'Repo'}
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <p id="catalog-empty" style="display: none; text-align: center; color: var(--mp-muted); padding: 2.5rem 0;">
+        No packages or apps match your current filter.
+      </p>
+    </div>
+  </section>
+
+  <AboutDeveloper />
+  <ContactSection />
+</BaseLayout>
+
+<script>
+  import { fetchAllPackageStats, recordPackageDownload } from '../lib/statsClient';
+
+  const searchInput = document.getElementById('catalog-search') as HTMLInputElement | null;
+  const tabButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('#catalog-grid [data-slug]');
+  const emptyState = document.getElementById('catalog-empty');
+
+  let activeFilter = 'all';
+
+  const applyFilters = (): void => {
+    const query = (searchInput?.value ?? '').trim().toLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const category = card.dataset.category ?? '';
+      const status = card.dataset.status ?? '';
+      const searchBlob = card.dataset.search ?? '';
+
+      const matchesFilter =
+        activeFilter === 'all' ||
+        (activeFilter === 'coming-soon' ? status === 'coming-soon' : category === activeFilter);
+      const matchesQuery = query.length === 0 || searchBlob.includes(query);
+
+      const visible = matchesFilter && matchesQuery;
+      card.style.display = visible ? 'flex' : 'none';
+      if (visible) visibleCount += 1;
+    });
+
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  };
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter ?? 'all';
+      tabButtons.forEach((b) => b.setAttribute('data-active', String(b === btn)));
+      applyFilters();
+    });
+  });
+
+  searchInput?.addEventListener('input', applyFilters);
+
+  document.querySelectorAll<HTMLButtonElement>('.copy-install-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const command = btn.dataset.copyCommand ?? '';
+      const slug = btn.dataset.copySlug ?? '';
+      if (!command) return;
+
+      await navigator.clipboard.writeText(command);
+      const originalHtml = btn.innerHTML;
+      btn.textContent = 'Copied';
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+      }, 1400);
+
+      if (slug) {
+        const updated = await recordPackageDownload(slug);
+        if (updated) {
+          const countEl = document.querySelector<HTMLElement>(`[data-download-count="${slug}"]`);
+          if (countEl) countEl.textContent = updated.total.toLocaleString();
+        }
+      }
+    });
+  });
+
+  // Hydrate live counts from Cloudflare D1 Worker
+  fetchAllPackageStats().then((stats) => {
+    if (!stats) return;
+    let grandTotal = 0;
+    for (const [slug, pkgStats] of Object.entries(stats)) {
+      grandTotal += pkgStats.total;
+      const el = document.querySelector<HTMLElement>(`[data-download-count="${slug}"]`);
+      if (el) el.textContent = pkgStats.total.toLocaleString();
+    }
+    const heroTotal = document.getElementById('hero-total-downloads');
+    if (heroTotal && grandTotal > 0) {
+      heroTotal.textContent = grandTotal.toLocaleString();
+    }
+  });
+</script>

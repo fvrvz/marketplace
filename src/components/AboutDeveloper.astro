@@ -1,0 +1,62 @@
+---
+import { DEVELOPER_PROFILE } from '../data/registry';
+import { MapPin, GitBranch, CodeXml } from '@lucide/astro';
+---
+
+<section id="about" class="mp-section">
+  <div class="mp-container">
+    <div class="mp-panel">
+      <div class="mp-two-col" style="align-items: center;">
+        <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+          <img
+            src={DEVELOPER_PROFILE.avatarUrl}
+            alt={DEVELOPER_PROFILE.name}
+            width="92"
+            height="92"
+            loading="lazy"
+            style="border-radius: 50%; border: 2px solid var(--mp-accent); object-fit: cover;"
+          />
+          <div>
+            <span class="mp-pill">
+              <CodeXml size={13} />
+              About the Developer
+            </span>
+            <h2 style="margin: 0.5rem 0 0.25rem; font-size: 1.6rem; font-weight: 800;">
+              {DEVELOPER_PROFILE.name}
+              <span style="color: var(--mp-muted); font-weight: 500; font-size: 1rem;">
+                @{DEVELOPER_PROFILE.handle}
+              </span>
+            </h2>
+            <p style="margin: 0; color: var(--mp-accent); font-weight: 600; font-size: 0.94rem;">
+              {DEVELOPER_PROFILE.title}
+            </p>
+            <p class="flex items-center gap-1" style="margin: 0.35rem 0 0; color: var(--mp-muted); font-size: 0.85rem;">
+              <MapPin size={14} />
+              {DEVELOPER_PROFILE.location}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p style="margin: 0 0 1rem; color: var(--mp-muted);">
+            {DEVELOPER_PROFILE.bio}
+          </p>
+          <div class="mp-badges" style="margin-bottom: 1.15rem;">
+            {DEVELOPER_PROFILE.skills.map((skill) => (
+              <span class="mp-badge">{skill}</span>
+            ))}
+          </div>
+          <a
+            href={DEVELOPER_PROFILE.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mp-btn mp-btn-primary"
+          >
+            <GitBranch size={16} />
+            Follow @fvrvz on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

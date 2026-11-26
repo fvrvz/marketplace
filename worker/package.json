@@ -1,0 +1,23 @@
+{
+  "name": "marketplace-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 execute marketplace-db --local --file=./schema.sql",
+    "db:migrate:remote": "wrangler d1 execute marketplace-db --remote --file=./schema.sql",
+    "db:seed:local": "wrangler d1 execute marketplace-db --local --file=./seed.sql",
+    "db:seed:remote": "wrangler d1 execute marketplace-db --remote --file=./seed.sql"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250501.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.168.0"
+  }
+}

@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WeeklyChart from '../../components/WeeklyChart.astro';
+import { MARKETPLACE_ITEMS, getCategoryLabel, type MarketplaceItem } from '../../data/registry';
+import { ArrowLeft, ExternalLink, GitBranch, Copy, CircleCheck, Lock } from '@lucide/astro';
+
+export function getStaticPaths(): Array<{ params: { slug: string }; props: { item: MarketplaceItem } }> {
+  return MARKETPLACE_ITEMS.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+interface Props {
+  readonly item: MarketplaceItem;
+}
+
+const { item } = Astro.props;
+const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
+---
+
+<BaseLayout title={`${item.name} — fvrvz.market`} description={item.tagline}>
+  <section class="mp-section" style="padding-top: 2rem;">
+    <div class="mp-container">
+      <a href="/" class="mp-btn" style="margin-bottom: 1.5rem;">
+        <ArrowLeft size={16} />
+        Back to Marketplace
+      </a>
+
+      <div class="mp-two-col">
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="mp-panel" style="padding: 0; overflow: hidden;">
+            <img
+              src={item.screenshot}
+              alt={`${item.name} screenshot`}
+              style="width: 100%; height: auto; display: block;"
+            />
+          </div>
+
+          <div class="mp-panel">
+            <div class="flex items-center justify-between gap-2" style="margin-bottom: 1rem; flex-wrap: wrap;">
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700;">Weekly Downloads</h3>
+                <p style="margin: 0.15rem 0 0; font-size: 0.82rem; color: var(--mp-muted);">
+                  Stored in Cloudflare D1 · Last 8 weeks
+                </p>
+              </div>
+              <div class="flex items-center gap-4">
+                <div>
+                  <div style="font-size: 1.25rem; font-weight: 800;" id="detail-total-downloads">
+                    {item.fallbackDownloads.total.toLocaleString()}
+                  </div>
+                  <div style="font-size: 0.74rem; color: var(--mp-muted);">Total</div>
+                </div>
+                <div>
+                  <div style="font-size: 1.25rem; font-weight: 800; color: var(--mp-success);" id="detail-weekly-downloads">
+                    {latestWeek.toLocaleString()}
+                  </div>
+                  <div style="font-size: 0.74rem; color: var(--mp-muted);">This Week</div>
+                </div>
+              </div>
+            </div>
+
+            <WeeklyChart
+              slug={item.slug}
+              weekly={item.fallbackDownloads.weekly}
+              accentColor={item.accentColor}
+            />
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="mp-panel">
+            <div class="mp-badges" style="margin-bottom: 0.75rem;">
+              <span class="mp-badge">{getCategoryLabel(item.category)}</span>
+              <span class="mp-badge">{item.language}</span>
+              <span class="mp-badge">v{item.version}</span>
+              <span class="mp-badge">{item.license}</span>
+              {item.isPrivate && (
+                <span class="mp-badge mp-badge-soon">
+                  <Lock size={11} />
+                  Private Preview
+                </span>
+              )}
+            </div>
+
+            <h1 style="margin: 0 0 0.5rem; font-size: clamp(1.75rem, 3.5vw, 2.35rem); font-weight: 800;">
+              {item.name}
+            </h1>
+            <p style="margin: 0 0 1.25rem; color: var(--mp-muted);">
+              {item.description}
+            </p>
+
+            <div class="flex flex-wrap gap-3">
+              {item.links.landingPage && (
+                <a
+                  href={item.links.landingPage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mp-btn mp-btn-primary"
+                >
+                  <ExternalLink size={16} />
+                  Visit Landing Page
+                </a>
+              )}
+              <a
+                href={item.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={`mp-btn ${item.links.landingPage ? '' : 'mp-btn-primary'}`}
+              >
+                <GitBranch size={16} />
+                View on GitHub
+              </a>
+            </div>
+          </div>
+
+          <div class="mp-panel">
+            <h2 style="margin: 0 0 0.75rem; font-size: 1.05rem; font-weight: 700;">Installation</h2>
+            <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+              {item.installMethods.map((method) => (
+                <div>
+                  <div style="font-size: 0.76rem; color: var(--mp-muted); margin-bottom: 0.25rem; font-weight: 600;">
+                    {method.label}
+                  </div>
+                  <div class="mp-install-box">
+                    <code class="mp-install-code">$ {method.command}</code>
+                    <button
+                      type="button"
+                      class="mp-btn detail-copy-btn"
+                      data-command={method.command}
+                      data-slug={item.slug}
+                      style="padding: 0.3rem 0.6rem; font-size: 0.76rem;"
+                    >
+                      <Copy size={13} />
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="mp-panel">
+            <h2 style="margin: 0 0 0.75rem; font-size: 1.05rem; font-weight: 700;">Highlights</h2>
+            <ul style="margin: 0 0 1.15rem; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+              {item.features.map((feat) => (
+                <li class="flex items-center gap-2" style="font-size: 0.92rem; color: var(--mp-muted);">
+                  <CircleCheck size={16} style="color: var(--mp-success); flex-shrink: 0;" />
+                  <span>{feat}</span>
+                </li>
+              ))}
+            </ul>
+
+            <h3 style="margin: 0 0 0.5rem; font-size: 0.92rem; font-weight: 700;">Quick Start</h3>
+            <pre
+              style="margin: 0; padding: 0.9rem; border-radius: 10px; background: var(--mp-surface-2); border: 1px solid var(--mp-border); overflow-x: auto; font-size: 0.8rem;"
+            ><code>{item.quickStart}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { fetchAllPackageStats, recordPackageDownload } from '../../lib/statsClient';
+
+  const copyButtons = document.querySelectorAll<HTMLButtonElement>('.detail-copy-btn');
+  const totalEl = document.getElementById('detail-total-downloads');
+  const weeklyEl = document.getElementById('detail-weekly-downloads');
+  const chartWrap = document.querySelector<HTMLElement>('[data-chart-slug]');
+  const pageSlug = chartWrap?.dataset.chartSlug ?? '';
+
+  copyButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const cmd = btn.dataset.command ?? '';
+      const slug = btn.dataset.slug ?? '';
+      if (!cmd) return;
+
+      await navigator.clipboard.writeText(cmd);
+      const prev = btn.innerHTML;
+      btn.textContent = 'Copied!';
+      setTimeout(() => {
+        btn.innerHTML = prev;
+      }, 1500);
+
+      if (slug) {
+        const updated = await recordPackageDownload(slug);
+        if (updated) {
+          if (totalEl) totalEl.textContent = updated.total.toLocaleString();
+          const latest = updated.weekly.at(-1)?.count ?? 0;
+          if (weeklyEl) weeklyEl.textContent = latest.toLocaleString();
+        }
+      }
+    });
+  });
+
+  if (pageSlug) {
+    fetchAllPackageStats().then((stats) => {
+      const pkg = stats?.[pageSlug];
+      if (!pkg) return;
+      if (totalEl) totalEl.textContent = pkg.total.toLocaleString();
+      const latest = pkg.weekly.at(-1)?.count ?? 0;
+      if (weeklyEl) weeklyEl.textContent = latest.toLocaleString();
+    });
+  }
+</script>

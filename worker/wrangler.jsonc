@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "marketplace-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "vars": {
+    "ALLOWED_ORIGINS": "https://marketplace.byfaraaz.com,https://fvrvz.github.io,http://localhost:4321,http://127.0.0.1:4321",
+    "CONTACT_FROM_EMAIL": "Marketplace <noreply@byfaraaz.com>",
+    "CONTACT_TO_EMAIL": "codefaraaz@gmail.com"
+  },
+  "d1_databases": [
+    {
+      "binding": "marketplace_db",
+      "database_name": "marketplace-db",
+      "database_id": "918a81bd-46d9-4442-b71e-3cab4616dc20"
+    }
+  ]
+}
