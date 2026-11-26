@@ -26,3 +26,7 @@ pnpm-debug.log*
 # Worker
 worker/node_modules/
 worker/.wrangler/
+
+# macOS
+.DS_Store
+**/.DS_Store
