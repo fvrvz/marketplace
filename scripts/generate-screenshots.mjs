@@ -5,7 +5,7 @@ const items = [
   { slug: 'nostyle-css', title: 'NoStyle CSS', sub: 'Utility-First Zero-JS CSS Framework', color: '#3b82f6', badge: 'npm · CSS' },
   { slug: 'gologger', title: 'gologger', sub: 'Semantic Colored Logger for Go', color: '#06b6d4', badge: 'Go · Package' },
   { slug: 'ngx-nostyle', title: 'ngx-nostyle', sub: 'Reusable Angular UI Component Library', color: '#ef4444', badge: 'Angular · UI Kit' },
-  { slug: 'mockease', title: 'MockEase', sub: 'Python REST API Mocking Solution', color: '#eab308', badge: 'Python · CLI' },
+  { slug: 'mockease', title: 'MockEase', sub: 'On-Prem & SaaS REST API Mocking Platform', color: '#eab308', badge: 'Python · SaaS' },
   { slug: 'notease', title: 'NoteEase', sub: 'Cross-Platform Flutter Notes App', color: '#6366f1', badge: 'Flutter · App' },
   { slug: 'authforest', title: 'AuthForest', sub: 'OIDC & OAuth2 Identity Provider', color: '#10b981', badge: 'Svelte · SaaS' },
   { slug: 'managease', title: 'ManagEase', sub: 'Kanban & Agile Project Management', color: '#8b5cf6', badge: 'SolidJS · SaaS' },
