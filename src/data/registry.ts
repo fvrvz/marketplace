@@ -61,7 +61,7 @@ export const DEVELOPER_PROFILE = {
   avatarUrl: 'https://avatars.githubusercontent.com/u/52616655?v=4',
   githubUrl: 'https://github.com/fvrvz',
   linkedinUrl: 'https://linkedin.com/in/faraazkhhan',
-  websiteUrl: 'https://marketplace.byfaraaz.com',
+  websiteUrl: 'https://www.byfaraaz.com',
   skills: ['TypeScript', 'Go', 'Astro', 'Angular', 'Flutter', 'Svelte', 'Cloudflare D1', 'NoStyle CSS'],
 } as const;
 
@@ -307,7 +307,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     status: 'stable',
     isPrivate: false,
     featured: true,
-    screenshot: '/screenshots/authforest.svg',
+    screenshot: '/screenshots/authforest.png',
     accentColor: '#10b981',
     installMethods: [
       { label: 'git', command: 'git clone https://github.com/fvrvz/authforest.git' },
@@ -352,7 +352,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     status: 'stable',
     isPrivate: false,
     featured: false,
-    screenshot: '/screenshots/managease.svg',
+    screenshot: '/screenshots/managease.png',
     accentColor: '#8b5cf6',
     installMethods: [
       { label: 'git', command: 'git clone https://github.com/fvrvz/managease.git' },
@@ -396,7 +396,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     status: 'stable',
     isPrivate: false,
     featured: false,
-    screenshot: '/screenshots/profilease.svg',
+    screenshot: '/screenshots/profilease.png',
     accentColor: '#f59e0b',
     installMethods: [
       { label: 'git', command: 'git clone https://github.com/fvrvz/profilease.git' },
@@ -440,7 +440,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     status: 'beta',
     isPrivate: false,
     featured: false,
-    screenshot: '/screenshots/billease.svg',
+    screenshot: '/screenshots/billease.png',
     accentColor: '#14b8a6',
     installMethods: [
       { label: 'git', command: 'git clone https://github.com/fvrvz/billease.git' },
