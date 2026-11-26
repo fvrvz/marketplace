@@ -17,9 +17,9 @@
   <circle cx="102" cy="56" r="6" fill="#10b981" fill-opacity="0.8"/>
   <line x1="36" y1="80" x2="764" y2="80" stroke="#1e293b" stroke-width="1"/>
   <rect x="64" y="110" width="130" height="28" rx="14" fill="#eab308" fill-opacity="0.18" stroke="#eab308" stroke-opacity="0.45"/>
-  <text x="129" y="129" text-anchor="middle" fill="#eab308" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Python · CLI</text>
+  <text x="129" y="129" text-anchor="middle" fill="#eab308" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600">Python · SaaS</text>
   <text x="64" y="184" fill="#f8fafc" font-family="ui-sans-serif, system-ui, sans-serif" font-size="38" font-weight="700" letter-spacing="-0.02em">MockEase</text>
-  <text x="64" y="218" fill="#94a3b8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18">Python REST API Mocking Solution</text>
+  <text x="64" y="218" fill="#94a3b8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18">On-Prem & SaaS REST API Mocking Platform</text>
   <rect x="64" y="256" width="672" height="128" rx="10" fill="#020617" stroke="#1e293b"/>
   <rect x="86" y="280" width="220" height="12" rx="6" fill="#eab308" fill-opacity="0.6"/>
   <rect x="86" y="308" width="460" height="10" rx="5" fill="#334155"/>

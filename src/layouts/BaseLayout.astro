@@ -1,7 +1,8 @@
 ---
 import '@fayso/nostyle-css';
 import '../styles/marketplace.css';
-import { Package, Moon, Sun, GitBranch } from '@lucide/astro';
+import { MARKETPLACE_ITEMS, getCategoryLabel } from '../data/registry';
+import { Moon, Sun, Search, ArrowUpRight } from '@lucide/astro';
 
 interface Props {
   readonly title: string;
@@ -10,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = 'Official marketplace showcase for reusable libraries, UI kits, and SaaS apps built by Faraaz Khan (fvrvz).',
+  description = 'Developer marketplace and showcase for reusable libraries, UI kits, and SaaS apps by Faraaz Khan.',
 } = Astro.props;
 ---
 
@@ -20,7 +21,18 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="css-framework" content="NoStyle CSS v2.0.1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
     <script is:inline>
       (() => {
@@ -35,9 +47,7 @@ const {
     <header class="mp-header">
       <nav class="mp-container mp-nav" aria-label="Primary">
         <a href="/" class="mp-brand">
-          <span class="mp-brand-badge" aria-hidden="true">
-            <Package size={18} />
-          </span>
+          <img src="/favicon.svg" alt="" width="26" height="26" style="border-radius: 7px;" />
           <span>fvrvz<span style="color: var(--mp-accent);">.market</span></span>
         </a>
 
@@ -45,25 +55,33 @@ const {
           <a href="/#catalog" class="mp-nav-link">Catalog</a>
           <a href="/#about" class="mp-nav-link mp-hide-sm">Developer</a>
           <a href="/#contact" class="mp-nav-link">Contact</a>
+
+          <button id="cmd-open-btn" type="button" class="mp-cmd-trigger mp-hide-sm" aria-label="Quick search">
+            <Search size={14} />
+            <span>Search</span>
+            <kbd class="mp-kbd">⌘K</kbd>
+          </button>
+
           <button
             id="theme-toggle"
             type="button"
-            class="mp-btn"
+            class="mp-copy-icon-btn"
             aria-label="Toggle color theme"
-            style="padding: 0.45rem 0.65rem;"
+            style="width: 34px; height: 34px; border: 1px solid var(--mp-border);"
           >
-            <Sun size={16} class="mp-icon-sun" />
-            <Moon size={16} class="mp-icon-moon" />
+            <Sun size={15} class="mp-icon-sun" />
+            <Moon size={15} class="mp-icon-moon" />
           </button>
+
           <a
             href="https://github.com/fvrvz"
             target="_blank"
             rel="noopener noreferrer"
             class="mp-btn mp-btn-primary"
-            style="padding: 0.45rem 0.8rem;"
+            style="height: 34px; padding: 0 0.75rem; font-size: 0.8rem;"
           >
-            <GitBranch size={16} />
-            <span class="mp-hide-sm">GitHub</span>
+            GitHub
+            <ArrowUpRight size={14} />
           </a>
         </div>
       </nav>
@@ -76,19 +94,89 @@ const {
     <footer class="mp-footer">
       <div class="mp-container flex flex-wrap items-center justify-between gap-4">
         <p style="margin: 0;">
-          © {new Date().getFullYear()} Faraaz Khan · Built with Astro, TypeScript, Cloudflare D1 &amp; NoStyle CSS.
+          © {new Date().getFullYear()} Faraaz Khan · Crafted with NoStyle CSS
         </p>
         <div class="flex items-center gap-4">
-          <a href="https://marketplace.byfaraaz.com" class="mp-nav-link">marketplace.byfaraaz.com</a>
-          <a href="https://github.com/fvrvz/marketplace" target="_blank" rel="noopener noreferrer" class="mp-nav-link">
-            Source
+          <a href="https://github.com/fvrvz" target="_blank" rel="noopener noreferrer" class="mp-nav-link" style="padding: 0;">
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/faraazkhhan" target="_blank" rel="noopener noreferrer" class="mp-nav-link" style="padding: 0;">
+            LinkedIn
+          </a>
+          <a href="https://marketplace.byfaraaz.com" class="mp-nav-link" style="padding: 0;">
+            marketplace.byfaraaz.com
           </a>
         </div>
       </div>
     </footer>
 
+    <!-- Command Palette Modal -->
+    <div id="cmd-modal" class="mp-modal-backdrop" data-open="false" role="dialog" aria-modal="true" aria-label="Quick search">
+      <div class="mp-modal">
+        <div style="display: flex; align-items: center; gap: 0.65rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--mp-border);">
+          <Search size={16} style="color: var(--mp-muted); flex-shrink: 0;" />
+          <input
+            id="cmd-input"
+            type="text"
+            placeholder="Jump to a package, UI kit, or app..."
+            style="width: 100%; border: none; background: transparent; color: var(--mp-text); font-size: 0.92rem; outline: none;"
+          />
+          <kbd class="mp-kbd">ESC</kbd>
+        </div>
+        <div id="cmd-results" class="mp-modal-results">
+          {MARKETPLACE_ITEMS.map((item) => (
+            <a
+              href={`/item/${item.slug}`}
+              class="mp-modal-item"
+              data-cmd-search={`${item.name} ${item.tagline} ${item.language} ${item.tags.join(' ')}`.toLowerCase()}
+            >
+              <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">{item.name}</div>
+                <div style="font-size: 0.78rem; color: var(--mp-muted);">{item.tagline}</div>
+              </div>
+              <span class="mp-badge">{getCategoryLabel(item.category)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
     <script>
-      import { animate, stagger } from 'motion';
+      import Lenis from 'lenis';
+      import { animate, inView, stagger } from 'motion';
+
+      // Expose NoStyle CSS runtime marker for framework detectors
+      (window as Window & { __NOSTYLE_CSS__?: { name: string; version: string } }).__NOSTYLE_CSS__ = {
+        name: 'NoStyle CSS',
+        version: '2.0.1',
+      };
+
+      // Smooth scrolling with Lenis
+      const lenis = new Lenis({
+        duration: 1.05,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      const raf = (time: number): void => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="/#"], a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const href = anchor.getAttribute('href') ?? '';
+          const hashIndex = href.indexOf('#');
+          if (hashIndex === -1) return;
+          const targetId = href.slice(hashIndex + 1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: -72 });
+          }
+        });
+      });
 
       const syncThemeIcons = (): void => {
         const theme = document.documentElement.getAttribute('data-theme') ?? 'dark';
@@ -102,8 +190,7 @@ const {
 
       syncThemeIcons();
 
-      const toggleBtn = document.getElementById('theme-toggle');
-      toggleBtn?.addEventListener('click', () => {
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme') ?? 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
@@ -111,14 +198,66 @@ const {
         syncThemeIcons();
       });
 
+      // Command palette
+      const modal = document.getElementById('cmd-modal');
+      const cmdInput = document.getElementById('cmd-input') as HTMLInputElement | null;
+      const cmdItems = document.querySelectorAll<HTMLElement>('#cmd-results [data-cmd-search]');
+
+      const setModalOpen = (open: boolean): void => {
+        if (!modal) return;
+        modal.setAttribute('data-open', String(open));
+        if (open) {
+          cmdInput?.focus();
+        } else if (cmdInput) {
+          cmdInput.value = '';
+          cmdItems.forEach((el) => {
+            el.style.display = 'flex';
+          });
+        }
+      };
+
+      document.getElementById('cmd-open-btn')?.addEventListener('click', () => setModalOpen(true));
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) setModalOpen(false);
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          const isOpen = modal?.getAttribute('data-open') === 'true';
+          setModalOpen(!isOpen);
+        } else if (e.key === 'Escape') {
+          setModalOpen(false);
+        }
+      });
+
+      cmdInput?.addEventListener('input', () => {
+        const q = cmdInput.value.trim().toLowerCase();
+        cmdItems.forEach((el) => {
+          const text = el.dataset.cmdSearch ?? '';
+          el.style.display = q.length === 0 || text.includes(q) ? 'flex' : 'none';
+        });
+      });
+
       const animatedEls = document.querySelectorAll<HTMLElement>('.mp-animate');
       if (animatedEls.length > 0) {
         animate(
           animatedEls,
-          { opacity: [0, 1], y: [14, 0] },
-          { duration: 0.45, delay: stagger(0.05), ease: 'easeOut' },
+          { opacity: [0, 1], y: [12, 0] },
+          { duration: 0.42, delay: stagger(0.035), ease: 'easeOut' },
         );
       }
+
+      document.querySelectorAll<HTMLElement>('.mp-reveal').forEach((el) => {
+        el.style.opacity = '0';
+        inView(
+          el,
+          () => {
+            animate(el, { opacity: [0, 1], y: [18, 0] }, { duration: 0.48, ease: 'easeOut' });
+          },
+          { amount: 0.15 },
+        );
+      });
     </script>
   </body>
 </html>
