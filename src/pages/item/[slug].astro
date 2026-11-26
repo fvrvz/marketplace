@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WeeklyChart from '../../components/WeeklyChart.astro';
 import { MARKETPLACE_ITEMS, getCategoryLabel, type MarketplaceItem } from '../../data/registry';
-import { ArrowLeft, ExternalLink, GitBranch, Copy, CircleCheck, Lock } from '@lucide/astro';
+import { ArrowLeft, ArrowUpRight, Copy, Check, CircleCheck, Lock } from '@lucide/astro';
 
 export function getStaticPaths(): Array<{ params: { slug: string }; props: { item: MarketplaceItem } }> {
   return MARKETPLACE_ITEMS.map((item) => ({
@@ -17,15 +17,22 @@ interface Props {
 
 const { item } = Astro.props;
 const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
+const primaryMethod = item.installMethods[0];
 ---
 
 <BaseLayout title={`${item.name} — fvrvz.market`} description={item.tagline}>
   <section class="mp-section" style="padding-top: 2rem;">
     <div class="mp-container">
-      <a href="/" class="mp-btn" style="margin-bottom: 1.5rem;">
-        <ArrowLeft size={16} />
-        Back to Marketplace
-      </a>
+      <div class="flex items-center gap-2" style="margin-bottom: 1.5rem; font-size: 0.84rem; color: var(--mp-subtle);">
+        <a href="/" class="mp-nav-link" style="padding: 0.2rem 0.45rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+          <ArrowLeft size={14} />
+          Catalog
+        </a>
+        <span>/</span>
+        <span>{getCategoryLabel(item.category)}</span>
+        <span>/</span>
+        <span style="color: var(--mp-text); font-weight: 600;">{item.name}</span>
+      </div>
 
       <div class="mp-two-col">
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
@@ -40,23 +47,23 @@ const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
           <div class="mp-panel">
             <div class="flex items-center justify-between gap-2" style="margin-bottom: 1rem; flex-wrap: wrap;">
               <div>
-                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700;">Weekly Downloads</h3>
-                <p style="margin: 0.15rem 0 0; font-size: 0.82rem; color: var(--mp-muted);">
-                  Stored in Cloudflare D1 · Last 8 weeks
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 700;">Download Activity</h3>
+                <p style="margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--mp-subtle);">
+                  Weekly trend · Last 8 weeks
                 </p>
               </div>
-              <div class="flex items-center gap-4">
+              <div class="flex items-center gap-5">
                 <div>
                   <div style="font-size: 1.25rem; font-weight: 800;" id="detail-total-downloads">
                     {item.fallbackDownloads.total.toLocaleString()}
                   </div>
-                  <div style="font-size: 0.74rem; color: var(--mp-muted);">Total</div>
+                  <div style="font-size: 0.72rem; color: var(--mp-subtle);">Total</div>
                 </div>
                 <div>
                   <div style="font-size: 1.25rem; font-weight: 800; color: var(--mp-success);" id="detail-weekly-downloads">
                     {latestWeek.toLocaleString()}
                   </div>
-                  <div style="font-size: 0.74rem; color: var(--mp-muted);">This Week</div>
+                  <div style="font-size: 0.72rem; color: var(--mp-subtle);">This Week</div>
                 </div>
               </div>
             </div>
@@ -71,27 +78,27 @@ const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
 
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
           <div class="mp-panel">
-            <div class="mp-badges" style="margin-bottom: 0.75rem;">
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.85rem;">
               <span class="mp-badge">{getCategoryLabel(item.category)}</span>
               <span class="mp-badge">{item.language}</span>
-              <span class="mp-badge">v{item.version}</span>
+              <span class="mp-badge mp-mono">v{item.version}</span>
               <span class="mp-badge">{item.license}</span>
               {item.isPrivate && (
-                <span class="mp-badge mp-badge-soon">
+                <span class="mp-badge">
                   <Lock size={11} />
                   Private Preview
                 </span>
               )}
             </div>
 
-            <h1 style="margin: 0 0 0.5rem; font-size: clamp(1.75rem, 3.5vw, 2.35rem); font-weight: 800;">
+            <h1 style="margin: 0 0 0.5rem; font-size: clamp(1.75rem, 3.5vw, 2.3rem); font-weight: 800; letter-spacing: -0.03em;">
               {item.name}
             </h1>
-            <p style="margin: 0 0 1.25rem; color: var(--mp-muted);">
+            <p style="margin: 0 0 1.35rem; color: var(--mp-muted); font-size: 0.95rem;">
               {item.description}
             </p>
 
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap gap-2">
               {item.links.landingPage && (
                 <a
                   href={item.links.landingPage}
@@ -99,8 +106,8 @@ const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
                   rel="noopener noreferrer"
                   class="mp-btn mp-btn-primary"
                 >
-                  <ExternalLink size={16} />
                   Visit Landing Page
+                  <ArrowUpRight size={15} />
                 </a>
               )}
               <a
@@ -109,52 +116,62 @@ const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
                 rel="noopener noreferrer"
                 class={`mp-btn ${item.links.landingPage ? '' : 'mp-btn-primary'}`}
               >
-                <GitBranch size={16} />
                 View on GitHub
+                <ArrowUpRight size={15} />
               </a>
             </div>
           </div>
 
-          <div class="mp-panel">
-            <h2 style="margin: 0 0 0.75rem; font-size: 1.05rem; font-weight: 700;">Installation</h2>
-            <div style="display: flex; flex-direction: column; gap: 0.65rem;">
-              {item.installMethods.map((method) => (
-                <div>
-                  <div style="font-size: 0.76rem; color: var(--mp-muted); margin-bottom: 0.25rem; font-weight: 600;">
-                    {method.label}
-                  </div>
-                  <div class="mp-install-box">
-                    <code class="mp-install-code">$ {method.command}</code>
+          {primaryMethod && (
+            <div class="mp-panel">
+              <div class="flex items-center justify-between gap-2" style="margin-bottom: 0.75rem; flex-wrap: wrap;">
+                <h2 style="margin: 0; font-size: 1rem; font-weight: 700;">Installation</h2>
+                <div class="mp-segmented" role="tablist" aria-label="Install method">
+                  {item.installMethods.map((method, idx) => (
                     <button
                       type="button"
-                      class="mp-btn detail-copy-btn"
+                      class="mp-seg-btn install-tab-btn"
+                      data-active={String(idx === 0)}
                       data-command={method.command}
-                      data-slug={item.slug}
-                      style="padding: 0.3rem 0.6rem; font-size: 0.76rem;"
+                      style="padding: 0.25rem 0.6rem; font-size: 0.75rem;"
                     >
-                      <Copy size={13} />
-                      Copy
+                      {method.label}
                     </button>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              <div class="mp-cli-pill mp-mono" style="padding: 0.55rem 0.75rem; font-size: 0.82rem;">
+                <span id="active-install-cmd" class="mp-cli-code">$ {primaryMethod.command}</span>
+                <button
+                  id="detail-copy-btn"
+                  type="button"
+                  class="mp-copy-icon-btn"
+                  data-command={primaryMethod.command}
+                  data-slug={item.slug}
+                  aria-label="Copy install command"
+                >
+                  <Copy size={14} class="icon-copy" />
+                  <Check size={14} class="icon-check" style="display: none; color: var(--mp-success);" />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           <div class="mp-panel">
-            <h2 style="margin: 0 0 0.75rem; font-size: 1.05rem; font-weight: 700;">Highlights</h2>
-            <ul style="margin: 0 0 1.15rem; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+            <h2 style="margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700;">Key Highlights</h2>
+            <ul style="margin: 0 0 1.2rem; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
               {item.features.map((feat) => (
-                <li class="flex items-center gap-2" style="font-size: 0.92rem; color: var(--mp-muted);">
-                  <CircleCheck size={16} style="color: var(--mp-success); flex-shrink: 0;" />
+                <li class="flex items-center gap-2" style="font-size: 0.9rem; color: var(--mp-muted);">
+                  <CircleCheck size={15} style="color: var(--mp-success); flex-shrink: 0;" />
                   <span>{feat}</span>
                 </li>
               ))}
             </ul>
 
-            <h3 style="margin: 0 0 0.5rem; font-size: 0.92rem; font-weight: 700;">Quick Start</h3>
+            <h3 style="margin: 0 0 0.5rem; font-size: 0.88rem; font-weight: 700;">Quick Start</h3>
             <pre
-              style="margin: 0; padding: 0.9rem; border-radius: 10px; background: var(--mp-surface-2); border: 1px solid var(--mp-border); overflow-x: auto; font-size: 0.8rem;"
+              style="margin: 0; padding: 0.9rem; border-radius: 10px; background: var(--mp-bg); border: 1px solid var(--mp-border); overflow-x: auto; font-size: 0.78rem; color: var(--mp-muted);"
             ><code>{item.quickStart}</code></pre>
           </div>
         </div>
@@ -166,34 +183,48 @@ const latestWeek = item.fallbackDownloads.weekly.at(-1)?.count ?? 0;
 <script>
   import { fetchAllPackageStats, recordPackageDownload } from '../../lib/statsClient';
 
-  const copyButtons = document.querySelectorAll<HTMLButtonElement>('.detail-copy-btn');
+  const tabBtns = document.querySelectorAll<HTMLButtonElement>('.install-tab-btn');
+  const cmdDisplay = document.getElementById('active-install-cmd');
+  const copyBtn = document.getElementById('detail-copy-btn') as HTMLButtonElement | null;
   const totalEl = document.getElementById('detail-total-downloads');
   const weeklyEl = document.getElementById('detail-weekly-downloads');
   const chartWrap = document.querySelector<HTMLElement>('[data-chart-slug]');
   const pageSlug = chartWrap?.dataset.chartSlug ?? '';
 
-  copyButtons.forEach((btn) => {
-    btn.addEventListener('click', async () => {
+  tabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
       const cmd = btn.dataset.command ?? '';
-      const slug = btn.dataset.slug ?? '';
-      if (!cmd) return;
-
-      await navigator.clipboard.writeText(cmd);
-      const prev = btn.innerHTML;
-      btn.textContent = 'Copied!';
-      setTimeout(() => {
-        btn.innerHTML = prev;
-      }, 1500);
-
-      if (slug) {
-        const updated = await recordPackageDownload(slug);
-        if (updated) {
-          if (totalEl) totalEl.textContent = updated.total.toLocaleString();
-          const latest = updated.weekly.at(-1)?.count ?? 0;
-          if (weeklyEl) weeklyEl.textContent = latest.toLocaleString();
-        }
-      }
+      tabBtns.forEach((b) => b.setAttribute('data-active', String(b === btn)));
+      if (cmdDisplay) cmdDisplay.textContent = `$ ${cmd}`;
+      if (copyBtn) copyBtn.dataset.command = cmd;
     });
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    const cmd = copyBtn.dataset.command ?? '';
+    const slug = copyBtn.dataset.slug ?? '';
+    if (!cmd) return;
+
+    await navigator.clipboard.writeText(cmd);
+    const copyIcon = copyBtn.querySelector<HTMLElement>('.icon-copy');
+    const checkIcon = copyBtn.querySelector<HTMLElement>('.icon-check');
+    if (copyIcon && checkIcon) {
+      copyIcon.style.display = 'none';
+      checkIcon.style.display = 'inline-flex';
+      setTimeout(() => {
+        copyIcon.style.display = 'inline-flex';
+        checkIcon.style.display = 'none';
+      }, 1500);
+    }
+
+    if (slug) {
+      const updated = await recordPackageDownload(slug);
+      if (updated) {
+        if (totalEl) totalEl.textContent = updated.total.toLocaleString();
+        const latest = updated.weekly.at(-1)?.count ?? 0;
+        if (weeklyEl) weeklyEl.textContent = latest.toLocaleString();
+      }
+    }
   });
 
   if (pageSlug) {

@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import AboutDeveloper from '../components/AboutDeveloper.astro';
 import ContactSection from '../components/ContactSection.astro';
 import { MARKETPLACE_ITEMS, getCategoryLabel } from '../data/registry';
-import { Search, Copy, ExternalLink, ArrowRight, Download, Sparkles, Lock } from '@lucide/astro';
+import { Search, Copy, Check, ArrowUpRight, ArrowRight, Download, Lock } from '@lucide/astro';
 
 const totalFallbackDownloads = MARKETPLACE_ITEMS.reduce(
   (sum, item) => sum + item.fallbackDownloads.total,
@@ -13,80 +13,75 @@ const publicCount = MARKETPLACE_ITEMS.filter((i) => !i.isPrivate).length;
 const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
 ---
 
-<BaseLayout title="fvrvz.market — Reusable Packages, UI Kits & SaaS Apps">
+<BaseLayout title="fvrvz.market — Developer Marketplace & App Showcase">
   <section class="mp-hero">
     <div class="mp-container">
-      <span class="mp-pill mp-animate">
-        <Sparkles size={14} />
-        Open-Source Registry &amp; App Showcase
+      <span class="mp-eyebrow mp-animate">
+        <span class="mp-status-dot" aria-hidden="true"></span>
+        Packages, UI Kits &amp; Apps by Faraaz Khan
       </span>
       <h1 class="mp-hero-title mp-animate">
-        Reusable libraries, UI kits &amp; apps built to ship faster.
+        Developer tools &amp; apps built to ship faster.
       </h1>
       <p class="mp-hero-sub mp-animate">
-        Explore production-ready Go packages, CSS utility frameworks, Angular UI components, Flutter apps, and full-stack SaaS platforms by Faraaz Khan.
+        A curated registry of reusable Go packages, CSS utility frameworks, Angular UI components, Flutter apps, and self-hostable SaaS platforms.
       </p>
       <div class="flex flex-wrap gap-3 mp-animate">
         <a href="#catalog" class="mp-btn mp-btn-primary">
-          Browse Catalog
-          <ArrowRight size={16} />
+          Explore Catalog
+          <ArrowRight size={15} />
         </a>
         <a href="#contact" class="mp-btn">Get in Touch</a>
       </div>
 
-      <div class="mp-stats-strip mp-animate">
-        <div class="mp-stat-card">
-          <div class="mp-stat-value">{MARKETPLACE_ITEMS.length}</div>
-          <div class="mp-stat-label">Total Projects ({publicCount} Public)</div>
+      <div class="mp-hero-metrics mp-animate">
+        <div>
+          <div class="mp-metric-val">{MARKETPLACE_ITEMS.length}</div>
+          <div class="mp-metric-lbl">{publicCount} Public Projects</div>
         </div>
-        <div class="mp-stat-card">
-          <div class="mp-stat-value" id="hero-total-downloads">{totalFallbackDownloads.toLocaleString()}</div>
-          <div class="mp-stat-label">Total Downloads (Cloudflare D1)</div>
+        <div>
+          <div class="mp-metric-val" id="hero-total-downloads">{totalFallbackDownloads.toLocaleString()}</div>
+          <div class="mp-metric-lbl">Total Downloads</div>
         </div>
-        <div class="mp-stat-card">
-          <div class="mp-stat-value">{ecosystemsCount}</div>
-          <div class="mp-stat-label">Ecosystems &amp; Languages</div>
+        <div>
+          <div class="mp-metric-val">{ecosystemsCount}</div>
+          <div class="mp-metric-lbl">Languages &amp; Stacks</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="catalog" class="mp-section" style="padding-top: 1rem;">
+  <section id="catalog" class="mp-section" style="padding-top: 1.5rem;">
     <div class="mp-container">
-      <div class="mp-controls">
+      <div class="mp-toolbar">
         <div class="mp-search-wrap">
           <Search
-            size={16}
-            style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--mp-muted);"
+            size={15}
+            style="position: absolute; left: 0.78rem; top: 50%; transform: translateY(-50%); color: var(--mp-subtle);"
           />
           <input
             id="catalog-search"
             type="search"
             class="mp-search-input"
-            placeholder="Search packages, Go, CSS, Flutter, SaaS..."
+            placeholder="Filter by name, stack, or tag..."
             aria-label="Search marketplace items"
           />
+          <kbd class="mp-kbd" style="position: absolute; right: 0.65rem; top: 50%; transform: translateY(-50%);">/</kbd>
         </div>
 
-        <div class="mp-tabs" role="tablist" aria-label="Filter by category">
-          <button type="button" class="mp-tab" data-filter="all" data-active="true">All</button>
-          <button type="button" class="mp-tab" data-filter="package">Packages &amp; Libs</button>
-          <button type="button" class="mp-tab" data-filter="ui-kit">UI Kits</button>
-          <button type="button" class="mp-tab" data-filter="saas">SaaS Platforms</button>
-          <button type="button" class="mp-tab" data-filter="app">Apps</button>
-          <button type="button" class="mp-tab" data-filter="coming-soon">Coming Soon</button>
+        <div class="mp-segmented" role="tablist" aria-label="Filter by category">
+          <button type="button" class="mp-seg-btn" data-filter="all" data-active="true">All</button>
+          <button type="button" class="mp-seg-btn" data-filter="package">Packages</button>
+          <button type="button" class="mp-seg-btn" data-filter="ui-kit">UI Kits</button>
+          <button type="button" class="mp-seg-btn" data-filter="saas">SaaS</button>
+          <button type="button" class="mp-seg-btn" data-filter="app">Apps</button>
+          <button type="button" class="mp-seg-btn" data-filter="coming-soon">Coming Soon</button>
         </div>
       </div>
 
       <div id="catalog-grid" class="mp-grid">
         {MARKETPLACE_ITEMS.map((item) => {
           const primaryInstall = item.installMethods[0];
-          const statusClass =
-            item.status === 'stable'
-              ? 'mp-badge-stable'
-              : item.status === 'beta'
-                ? 'mp-badge-beta'
-                : 'mp-badge-soon';
 
           return (
             <article
@@ -98,56 +93,53 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
             >
               <a href={`/item/${item.slug}`} class="mp-card-media" aria-label={`View ${item.name} details`}>
                 <img src={item.screenshot} alt={`${item.name} preview`} loading="lazy" />
+                <div class="mp-card-float">
+                  <span class="mp-chip">{getCategoryLabel(item.category)}</span>
+                  <span class="mp-chip">
+                    {item.isPrivate && <Lock size={11} />}
+                    {item.language}
+                  </span>
+                </div>
               </a>
 
               <div class="mp-card-body">
-                <div class="mp-badges">
-                  <span class="mp-badge">{getCategoryLabel(item.category)}</span>
-                  <span class="mp-badge">{item.language}</span>
-                  <span class={`mp-badge ${statusClass}`}>
-                    {item.isPrivate && <Lock size={11} />}
-                    {item.status}
-                  </span>
-                </div>
-
                 <div>
                   <div class="flex items-center justify-between gap-2">
-                    <h2 style="margin: 0; font-size: 1.18rem; font-weight: 700;">
+                    <h2 class="mp-card-title">
                       <a href={`/item/${item.slug}`} style="color: inherit; text-decoration: none;">
                         {item.name}
                       </a>
                     </h2>
-                    <span class="flex items-center gap-1" style="font-size: 0.78rem; color: var(--mp-muted);">
-                      <Download size={13} />
+                    <span class="flex items-center gap-1 mp-mono" style="font-size: 0.76rem; color: var(--mp-subtle);">
+                      <Download size={12} />
                       <span data-download-count={item.slug}>
                         {item.fallbackDownloads.total.toLocaleString()}
                       </span>
                     </span>
                   </div>
-                  <p style="margin: 0.35rem 0 0; color: var(--mp-muted); font-size: 0.9rem;">
-                    {item.tagline}
-                  </p>
+                  <p class="mp-card-desc">{item.tagline}</p>
                 </div>
 
                 {primaryInstall && (
-                  <div class="mp-install-box">
-                    <code class="mp-install-code">$ {primaryInstall.command}</code>
+                  <div class="mp-cli-pill mp-mono">
+                    <span class="mp-cli-code">$ {primaryInstall.command}</span>
                     <button
                       type="button"
-                      class="mp-btn copy-install-btn"
+                      class="mp-copy-icon-btn copy-install-btn"
                       data-copy-command={primaryInstall.command}
                       data-copy-slug={item.slug}
                       aria-label={`Copy install command for ${item.name}`}
-                      style="padding: 0.28rem 0.5rem; font-size: 0.74rem;"
                     >
-                      <Copy size={13} />
+                      <Copy size={13} class="icon-copy" />
+                      <Check size={13} class="icon-check" style="display: none; color: var(--mp-success);" />
                     </button>
                   </div>
                 )}
 
-                <div class="flex items-center justify-between gap-2" style="margin-top: auto; padding-top: 0.35rem;">
+                <div class="flex items-center justify-between gap-2" style="margin-top: auto; padding-top: 0.25rem;">
                   <a href={`/item/${item.slug}`} class="mp-btn mp-btn-primary" style="flex: 1;">
-                    Details &amp; Stats
+                    Explore
+                    <ArrowRight size={14} />
                   </a>
                   <a
                     href={item.links.landingPage ?? item.links.github}
@@ -156,8 +148,8 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
                     class="mp-btn"
                     title={item.links.landingPage ? 'Visit Landing Page' : 'View on GitHub'}
                   >
-                    <ExternalLink size={15} />
                     {item.links.landingPage ? 'Site' : 'Repo'}
+                    <ArrowUpRight size={14} />
                   </a>
                 </div>
               </div>
@@ -166,8 +158,8 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
         })}
       </div>
 
-      <p id="catalog-empty" style="display: none; text-align: center; color: var(--mp-muted); padding: 2.5rem 0;">
-        No packages or apps match your current filter.
+      <p id="catalog-empty" style="display: none; text-align: center; color: var(--mp-subtle); padding: 3rem 0;">
+        No projects match your current filter.
       </p>
     </div>
   </section>
@@ -220,6 +212,17 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
 
   searchInput?.addEventListener('input', applyFilters);
 
+  window.addEventListener('keydown', (e) => {
+    if (
+      e.key === '/' &&
+      document.activeElement?.tagName !== 'INPUT' &&
+      document.activeElement?.tagName !== 'TEXTAREA'
+    ) {
+      e.preventDefault();
+      searchInput?.focus();
+    }
+  });
+
   document.querySelectorAll<HTMLButtonElement>('.copy-install-btn').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const command = btn.dataset.copyCommand ?? '';
@@ -227,11 +230,16 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
       if (!command) return;
 
       await navigator.clipboard.writeText(command);
-      const originalHtml = btn.innerHTML;
-      btn.textContent = 'Copied';
-      setTimeout(() => {
-        btn.innerHTML = originalHtml;
-      }, 1400);
+      const copyIcon = btn.querySelector<HTMLElement>('.icon-copy');
+      const checkIcon = btn.querySelector<HTMLElement>('.icon-check');
+      if (copyIcon && checkIcon) {
+        copyIcon.style.display = 'none';
+        checkIcon.style.display = 'inline-flex';
+        setTimeout(() => {
+          copyIcon.style.display = 'inline-flex';
+          checkIcon.style.display = 'none';
+        }, 1400);
+      }
 
       if (slug) {
         const updated = await recordPackageDownload(slug);
@@ -243,7 +251,6 @@ const ecosystemsCount = new Set(MARKETPLACE_ITEMS.map((i) => i.ecosystem)).size;
     });
   });
 
-  // Hydrate live counts from Cloudflare D1 Worker
   fetchAllPackageStats().then((stats) => {
     if (!stats) return;
     let grandTotal = 0;

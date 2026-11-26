@@ -16,6 +16,7 @@
     "@fayso/nostyle-css": "^2.0.1",
     "@lucide/astro": "^1.0.0",
     "astro": "^7.4.13",
+    "lenis": "^1.3.28",
     "motion": "^14.14.0",
     "zod": "^4.3.6"
   },

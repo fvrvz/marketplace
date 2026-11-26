@@ -1,60 +1,68 @@
 ---
 import { DEVELOPER_PROFILE } from '../data/registry';
-import { MapPin, GitBranch, CodeXml } from '@lucide/astro';
+import { MapPin, ArrowUpRight } from '@lucide/astro';
 ---
 
-<section id="about" class="mp-section">
+<section id="about" class="mp-section" style="padding-bottom: 1.5rem;">
   <div class="mp-container">
-    <div class="mp-panel">
+    <div class="mp-panel mp-reveal">
       <div class="mp-two-col" style="align-items: center;">
         <div class="flex items-center gap-4" style="flex-wrap: wrap;">
           <img
             src={DEVELOPER_PROFILE.avatarUrl}
             alt={DEVELOPER_PROFILE.name}
-            width="92"
-            height="92"
+            width="84"
+            height="84"
             loading="lazy"
-            style="border-radius: 50%; border: 2px solid var(--mp-accent); object-fit: cover;"
+            style="border-radius: 50%; border: 2px solid var(--mp-border-strong); object-fit: cover;"
           />
           <div>
-            <span class="mp-pill">
-              <CodeXml size={13} />
-              About the Developer
-            </span>
-            <h2 style="margin: 0.5rem 0 0.25rem; font-size: 1.6rem; font-weight: 800;">
-              {DEVELOPER_PROFILE.name}
-              <span style="color: var(--mp-muted); font-weight: 500; font-size: 1rem;">
+            <span class="mp-eyebrow" style="margin-bottom: 0.45rem;">About the Builder</span>
+            <h2 style="margin: 0.25rem 0 0.2rem; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.45rem;">
+              <span>{DEVELOPER_PROFILE.name}</span>
+              <span style="color: var(--mp-subtle); font-weight: 500; font-size: 0.95rem;">
                 @{DEVELOPER_PROFILE.handle}
               </span>
             </h2>
-            <p style="margin: 0; color: var(--mp-accent); font-weight: 600; font-size: 0.94rem;">
+            <p style="margin: 0; color: var(--mp-accent); font-weight: 600; font-size: 0.88rem;">
               {DEVELOPER_PROFILE.title}
             </p>
-            <p class="flex items-center gap-1" style="margin: 0.35rem 0 0; color: var(--mp-muted); font-size: 0.85rem;">
-              <MapPin size={14} />
+            <p class="flex items-center gap-1" style="margin: 0.3rem 0 0; color: var(--mp-subtle); font-size: 0.82rem;">
+              <MapPin size={13} />
               {DEVELOPER_PROFILE.location}
             </p>
           </div>
         </div>
 
         <div>
-          <p style="margin: 0 0 1rem; color: var(--mp-muted);">
+          <p style="margin: 0 0 1rem; color: var(--mp-muted); font-size: 0.92rem;">
             {DEVELOPER_PROFILE.bio}
           </p>
-          <div class="mp-badges" style="margin-bottom: 1.15rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.15rem;">
             {DEVELOPER_PROFILE.skills.map((skill) => (
               <span class="mp-badge">{skill}</span>
             ))}
           </div>
-          <a
-            href={DEVELOPER_PROFILE.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mp-btn mp-btn-primary"
-          >
-            <GitBranch size={16} />
-            Follow @fvrvz on GitHub
-          </a>
+          <div class="flex flex-wrap gap-2">
+            <a
+              href={DEVELOPER_PROFILE.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mp-btn mp-btn-primary"
+            >
+              GitHub
+              <ArrowUpRight size={15} />
+            </a>
+            <a
+              href={DEVELOPER_PROFILE.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mp-btn"
+            >
+              LinkedIn
+              <ArrowUpRight size={15} />
+            </a>
+          </div>
         </div>
       </div>
     </div>

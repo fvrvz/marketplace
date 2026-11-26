@@ -60,6 +60,7 @@ export const DEVELOPER_PROFILE = {
   location: 'Guna, Madhya Pradesh, India',
   avatarUrl: 'https://avatars.githubusercontent.com/u/52616655?v=4',
   githubUrl: 'https://github.com/fvrvz',
+  linkedinUrl: 'https://linkedin.com/in/faraazkhhan',
   websiteUrl: 'https://marketplace.byfaraaz.com',
   skills: ['TypeScript', 'Go', 'Astro', 'Angular', 'Flutter', 'Svelte', 'Cloudflare D1', 'NoStyle CSS'],
 } as const;
@@ -205,17 +206,17 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
   {
     slug: 'mockease',
     name: 'MockEase',
-    tagline: 'Developer-first Python solution to spin up mock REST APIs.',
+    tagline: 'Self-hostable & SaaS REST API mocking platform.',
     description:
-      'Quickly define, serve, and test dynamic mock API endpoints in Python without waiting on backend services.',
-    category: 'package',
+      'Spin up realistic, configurable mock REST APIs in seconds. Deploy on-prem with Docker/Python or run as a hosted SaaS workspace for frontend and QA teams.',
+    category: 'saas',
     ecosystem: 'python',
-    language: 'Python',
+    language: 'Python / SaaS',
     version: '0.8.2',
     license: 'MIT',
     status: 'stable',
     isPrivate: false,
-    featured: false,
+    featured: true,
     screenshot: '/screenshots/mockease.svg',
     accentColor: '#eab308',
     installMethods: [
@@ -224,12 +225,13 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     quickStart: `git clone https://github.com/fvrvz/mockease.git\ncd mockease\npip install -r requirements.txt\npython main.py`,
     features: [
+      'Deploy on-prem or run as a multi-project SaaS',
       'Instant REST endpoint mocking from JSON/Python specs',
-      'Configurable latency and status codes',
-      'Ideal for frontend and mobile integration testing',
+      'Configurable latency, headers, and status codes',
     ],
-    tags: ['python', 'mock-api', 'devtools', 'testing'],
+    tags: ['python', 'mock-api', 'saas', 'on-prem', 'devtools'],
     links: {
+      landingPage: 'https://mockease.byfaraaz.com',
       github: 'https://github.com/fvrvz/mockease',
     },
     fallbackDownloads: {
@@ -274,6 +276,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['flutter', 'dart', 'notes', 'cross-platform', 'mobile'],
     links: {
+      landingPage: 'https://notease.byfaraaz.com',
       github: 'https://github.com/fvrvz/notease',
     },
     fallbackDownloads: {
@@ -317,7 +320,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['oauth2', 'oidc', 'jwt', 'idp', 'auth', 'saas'],
     links: {
-      landingPage: 'https://fvrvz.github.io/authforest/',
+      landingPage: 'https://authforest.byfaraaz.com',
       github: 'https://github.com/fvrvz/authforest',
       docs: 'https://fvrvz.github.io/authforest/',
     },
@@ -362,6 +365,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['kanban', 'agile', 'saas', 'project-management'],
     links: {
+      landingPage: 'https://managease.byfaraaz.com',
       github: 'https://github.com/fvrvz/managease',
     },
     fallbackDownloads: {
@@ -405,6 +409,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['saas', 'booking', 'portfolio', 'angular'],
     links: {
+      landingPage: 'https://profilease.byfaraaz.com',
       github: 'https://github.com/fvrvz/profilease',
     },
     fallbackDownloads: {
@@ -448,6 +453,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['saas', 'billing', 'invoicing', 'typescript'],
     links: {
+      landingPage: 'https://billease.byfaraaz.com',
       github: 'https://github.com/fvrvz/billease',
     },
     fallbackDownloads: {
