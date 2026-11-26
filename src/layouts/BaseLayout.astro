@@ -24,8 +24,10 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta name="theme-color" content="#09090b" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
+    <meta name="css-framework" content="NoStyle CSS v2.0.1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="stylesheet" href="https://fvrvz.github.io/nostyle-css/static/css/nostyle.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -141,7 +143,41 @@ const {
     </div>
 
     <script>
-      import { animate, stagger } from 'motion';
+      import Lenis from 'lenis';
+      import { animate, inView, stagger } from 'motion';
+
+      // Expose NoStyle CSS runtime marker for framework detectors
+      (window as Window & { __NOSTYLE_CSS__?: { name: string; version: string } }).__NOSTYLE_CSS__ = {
+        name: 'NoStyle CSS',
+        version: '2.0.1',
+      };
+
+      // Smooth scrolling with Lenis
+      const lenis = new Lenis({
+        duration: 1.05,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      const raf = (time: number): void => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="/#"], a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const href = anchor.getAttribute('href') ?? '';
+          const hashIndex = href.indexOf('#');
+          if (hashIndex === -1) return;
+          const targetId = href.slice(hashIndex + 1);
+          const target = document.getElementById(targetId);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: -72 });
+          }
+        });
+      });
 
       const syncThemeIcons = (): void => {
         const theme = document.documentElement.getAttribute('data-theme') ?? 'dark';
@@ -208,10 +244,21 @@ const {
       if (animatedEls.length > 0) {
         animate(
           animatedEls,
-          { opacity: [0, 1], y: [10, 0] },
-          { duration: 0.38, delay: stagger(0.035), ease: 'easeOut' },
+          { opacity: [0, 1], y: [12, 0] },
+          { duration: 0.42, delay: stagger(0.035), ease: 'easeOut' },
         );
       }
+
+      document.querySelectorAll<HTMLElement>('.mp-reveal').forEach((el) => {
+        el.style.opacity = '0';
+        inView(
+          el,
+          () => {
+            animate(el, { opacity: [0, 1], y: [18, 0] }, { duration: 0.48, ease: 'easeOut' });
+          },
+          { amount: 0.15 },
+        );
+      });
     </script>
   </body>
 </html>

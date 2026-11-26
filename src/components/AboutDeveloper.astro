@@ -5,7 +5,7 @@ import { MapPin, ArrowUpRight } from '@lucide/astro';
 
 <section id="about" class="mp-section" style="padding-bottom: 1.5rem;">
   <div class="mp-container">
-    <div class="mp-panel">
+    <div class="mp-panel mp-reveal">
       <div class="mp-two-col" style="align-items: center;">
         <div class="flex items-center gap-4" style="flex-wrap: wrap;">
           <img
@@ -18,8 +18,8 @@ import { MapPin, ArrowUpRight } from '@lucide/astro';
           />
           <div>
             <span class="mp-eyebrow" style="margin-bottom: 0.45rem;">About the Builder</span>
-            <h2 style="margin: 0.25rem 0 0.2rem; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em;">
-              {DEVELOPER_PROFILE.name}
+            <h2 style="margin: 0.25rem 0 0.2rem; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.45rem;">
+              <span>{DEVELOPER_PROFILE.name}</span>
               <span style="color: var(--mp-subtle); font-weight: 500; font-size: 0.95rem;">
                 @{DEVELOPER_PROFILE.handle}
               </span>

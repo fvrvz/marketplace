@@ -231,6 +231,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['python', 'mock-api', 'saas', 'on-prem', 'devtools'],
     links: {
+      landingPage: 'https://mockease.byfaraaz.com',
       github: 'https://github.com/fvrvz/mockease',
     },
     fallbackDownloads: {
@@ -275,6 +276,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['flutter', 'dart', 'notes', 'cross-platform', 'mobile'],
     links: {
+      landingPage: 'https://notease.byfaraaz.com',
       github: 'https://github.com/fvrvz/notease',
     },
     fallbackDownloads: {
@@ -318,7 +320,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['oauth2', 'oidc', 'jwt', 'idp', 'auth', 'saas'],
     links: {
-      landingPage: 'https://fvrvz.github.io/authforest/',
+      landingPage: 'https://authforest.byfaraaz.com',
       github: 'https://github.com/fvrvz/authforest',
       docs: 'https://fvrvz.github.io/authforest/',
     },
@@ -363,6 +365,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['kanban', 'agile', 'saas', 'project-management'],
     links: {
+      landingPage: 'https://managease.byfaraaz.com',
       github: 'https://github.com/fvrvz/managease',
     },
     fallbackDownloads: {
@@ -406,6 +409,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['saas', 'booking', 'portfolio', 'angular'],
     links: {
+      landingPage: 'https://profilease.byfaraaz.com',
       github: 'https://github.com/fvrvz/profilease',
     },
     fallbackDownloads: {
@@ -449,6 +453,7 @@ export const MARKETPLACE_ITEMS: readonly MarketplaceItem[] = [
     ],
     tags: ['saas', 'billing', 'invoicing', 'typescript'],
     links: {
+      landingPage: 'https://billease.byfaraaz.com',
       github: 'https://github.com/fvrvz/billease',
     },
     fallbackDownloads: {
